@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoPlay | Eco Challenge App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --primary-dark: #27ae60;
+      --secondary: #3498db;
+      --accent: rgb(219, 52, 52);
+      --dark-bg: #121212;
+      --dark-card: #1e1e1e;
+      --dark-text: #e0e0e0;
+      --dark-border: #333;
+      --dark-hover: #2a2a2a;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+    
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .visible {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      width: 100%;
+      background: var(--dark-card);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--dark-border);
+    }
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+    
+    h1, h2, h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    h3 {
+      font-size: 1.3rem;
+      color: var(--secondary);
+      margin-top: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+    
+    p {
+      margin-bottom: 1.5rem;
+      color: #aaa;
+      text-align: center;
+    }
+    
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+    
+    .btn {
+      padding: 12px 28px;
+      background-color: var(--primary);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(46, 204, 113, 0.2);
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(46, 204, 113, 0.25);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark-text);
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1rem;
+      background-color: var(--dark-hover);
+      border: 2px solid var(--dark-border);
+      border-radius: 8px;
+      transition: all 0.3s;
+      color: var(--dark-text);
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+    }
+    
+    .time-section {
+      background: rgba(40, 40, 40, 0.5);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+      border: 1px solid var(--dark-border);
+    }
+    
+    .time-section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      background: var(--dark-hover);
+    }
+    
+    .result {
+      background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
+      padding: 2rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary);
+      animation: fadeIn 0.5s ease-out;
+      background-color: rgba(30, 30, 30, 0.7);
+      border: 1px solid var(--dark-border);
+    }
+    
+    .challenge {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px dashed var(--dark-border);
+    }
+    
+    .challenge:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .challenge-title {
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .challenge-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+      text-align: center;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div id="splashScreen" class="screen visible animate__animated animate__fadeIn">
+    <div class="container">
+      <div class="logo">🌿</div>
+      <h1>Welcome to EcoPlay</h1>
+      <p>Transform your daily routine into an exciting eco-friendly adventure! Earn points, complete challenges, and make a positive impact on our planet.</p>
+      <div class="btn-container">
+        <button class="btn" onclick="goToForm()">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="formScreen" class="screen">
+    <div class="container animate__animated animate__fadeIn">
+      <h2>Your Daily Eco Challenge Planner</h2>
+      <p>Fill in your available times to receive personalized eco-friendly activities tailored to your schedule.</p>
+      
+      <form id="ecoForm">
+       
+        <div class="time-section">
+          <h3>Morning Routine</h3>
+          <div class="two-columns">
+            <div class="form-group">
+              <label for="morningDuration">Duration (minutes)</label>
+              <input type="number" id="morningDuration" placeholder="e.g., 30" min="5" max="120" required>
+            </div>
+            <div class="form-group">
+              <label for="morningTime">Available Time</label>
+              <input type="time" id="morningTime" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evening -->
+        <div class="time-section">
+          <h3>Evening Routine</h3>
+          <div class="two-columns">
+            <div class="form-group">
+              <label for="eveningDuration">Duration (minutes)</label>
+              <input type="number" id="eveningDuration" placeholder="e.g., 45" min="5" max="120" required>
+            </div>
+            <div class="form-group">
+              <label for="eveningTime">Available Time</label>
+              <input type="time" id="eveningTime" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Night -->
+        <div class="time-section">
+          <h3>Night Routine</h3>
+          <div class="two-columns">
+            <div class="form-group">
+              <label for="nightDuration">Duration (minutes)</label>
+              <input type="number" id="nightDuration" placeholder="e.g., 20" min="5" max="120" required>
+            </div>
+            <div class="form-group">
+              <label for="nightTime">Available Time</label>
+              <input type="time" id="nightTime" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button type="submit" class="btn" id="submitBtn">
+            Generate My Eco Challenges
+            <span id="loadingSpinner" class="loading" style="display: none;"></span>
+          </button>
+        </div>
+      </form>
+
+      <div id="output" class="result" style="display: none;">
+        <h3>Your Personalized Eco Challenges</h3>
+        <div id="challengesContainer">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+   // Show form page with animation
+function goToForm() {
+  document.getElementById("splashScreen").classList.remove("visible");
+  document.getElementById("formScreen").classList.add("visible");
+}
+
+// Replace with your actual Relay webhook URL
+const RELAY_WEBHOOK_URL = "https://hook.relay.app/api/v1/playbook/cme04m4xi0gpv0pm6d10bg6bl/trigger/QbjxZh6xak81OseCXh53kA"; // <-- Paste your Relay webhook URL here
+
+
+document.getElementById("ecoForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  
+  // Show loading spinner
+  const submitBtn = document.getElementById("submitBtn");
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  submitBtn.disabled = true;
+  loadingSpinner.style.display = "inline-block";
+  
+  // Get form values
+  const morningDuration = document.getElementById("morningDuration").value;
+  const morningTime = document.getElementById("morningTime").value;
+  const eveningDuration = document.getElementById("eveningDuration").value;
+  const eveningTime = document.getElementById("eveningTime").value;
+  const nightDuration = document.getElementById("nightDuration").value;
+  const nightTime = document.getElementById("nightTime").value;
+
+  // Prepare input payload to send to Relay
+  const inputData = {
+    morning: {
+      time: morningTime,
+      duration: morningDuration
+    },
+    evening: {
+      time: eveningTime,
+      duration: eveningDuration
+    },
+    night: {
+      time: nightTime,
+      duration: nightDuration
+    }
+  };
+
+  try {
+    // Send POST request to Relay webhook
+    
+    const response = await fetch(RELAY_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(inputData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+
+    // Access challenges inside `output`
+    const output = result.output || {};
+    const challenges = {
+      morningChallenge: output.morningChallenge || "No morning challenge generated.",
+      eveningChallenge: output.eveningChallenge || "No evening challenge generated.",
+      nightChallenge: output.nightChallenge || "No night challenge generated."
+    };
+
+    // Display the challenges
+    document.getElementById("output").style.display = "block";
+    document.getElementById("challengesContainer").innerHTML = `
+      <div class="challenge">
+        <div class="challenge-title">
+          <span class="challenge-icon">🌅</span>
+          Morning Challenge (${morningTime}, ${morningDuration} mins)
+        </div>
+        <p>${challenges.morningChallenge}</p>
+      </div>
+      <div class="challenge">
+        <div class="challenge-title">
+          <span class="challenge-icon">🌇</span>
+          Evening Challenge (${eveningTime}, ${eveningDuration} mins)
+        </div>
+        <p>${challenges.eveningChallenge}</p>
+      </div>
+      <div class="challenge">
+        <div class="challenge-title">
+          <span class="challenge-icon">🌙</span>
+          Night Challenge (${nightTime}, ${nightDuration} mins)
+        </div>
+        <p>${challenges.nightChallenge}</p>
+      </div>
+    `;
+
+    // Scroll to the output section
+    document.getElementById("output").scrollIntoView({ behavior: 'smooth' });
+
+  } catch (error) {
+    console.error("Error fetching challenges:", error);
+    document.getElementById("output").style.display = "block";
+    document.getElementById("challengesContainer").innerHTML = `
+      <div class="challenge">
+        <p>Sorry, we couldn't generate your challenges right now. Please try again later.</p>
+        <p>Error: ${error.message}</p>
+      </div>
+    `;
+  } finally {
+    // Re-enable button and hide spinner
+    submitBtn.disabled = false;
+    loadingSpinner.style.display = "none";
+  }
+});
+
+  </script>
+</body>
+</html>
